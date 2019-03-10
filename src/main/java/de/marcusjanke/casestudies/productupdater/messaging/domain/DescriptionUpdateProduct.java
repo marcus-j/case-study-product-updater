@@ -29,10 +29,10 @@ public class DescriptionUpdateProduct {
 	/**
 	 * new DescriptionUpdateProduct
 	 * 
-	 * @param description
-	 * @param sku
+	 * @param description description
+	 * @param sku SKU
 	 */
-	public DescriptionUpdateProduct(String description, String sku) {
+	DescriptionUpdateProduct(String description, String sku) {
 		super();
 		this.description = description;
 		this.sku = sku;
@@ -41,7 +41,7 @@ public class DescriptionUpdateProduct {
 	/**
 	 * set description
 	 * 
-	 * @param description
+	 * @param description description
 	 */
 	@XmlValue
 	@XmlJavaTypeAdapter(CDATAAdapter.class)
@@ -52,7 +52,7 @@ public class DescriptionUpdateProduct {
 	/**
 	 * set SKU
 	 * 
-	 * @param sku
+	 * @param sku SKU
 	 */
 	@XmlAttribute(name = "sku")
 	public void setSku(String sku) {
@@ -98,14 +98,14 @@ public class DescriptionUpdateProduct {
 		if (description == null) {
 			if (other.description != null)
 				return false;
-		} else if (!description.equals(other.description))
+		} else if (!description.equals(other.description)) {
 			return false;
+		}
 		if (sku == null) {
-			if (other.sku != null)
-				return false;
-		} else if (!sku.equals(other.sku))
-			return false;
-		return true;
+			return other.sku == null;
+		} else {
+			return sku.equals(other.sku);
+		}
 	}
 
 	@Override
