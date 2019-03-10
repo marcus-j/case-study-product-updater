@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 
+import static java.lang.String.format;
+
 /**
  * Produce dummy messages from resources
  * 
@@ -27,16 +29,16 @@ public class DummyProducer implements ProductsProducer, UpdateProducer {
 
 	@Autowired
 	private JmsTemplate jmsTemplate;
-	private final ScheduledExecutorService execService1 = Executors.newScheduledThreadPool(4);
+	private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(4);
 	private final Logger logger = LoggerFactory.getLogger(DummyProducer.class);
 
 	/**
 	 * new DummyProducer
 	 */
 	public DummyProducer() {
-		execService1.scheduleAtFixedRate(this::produceProductsMessage, 5, 60, TimeUnit.SECONDS);
-		execService1.scheduleAtFixedRate(this::produceUpdateMessage, 10, 10, TimeUnit.SECONDS);
-		logger.info(String.format("Started DummyProducer"));
+		executorService.scheduleAtFixedRate(this::produceProductsMessage, 5, 60, TimeUnit.SECONDS);
+		executorService.scheduleAtFixedRate(this::produceUpdateMessage, 10, 10, TimeUnit.SECONDS);
+		logger.info("Started DummyProducer");
 	}
 
 	/**
@@ -47,9 +49,9 @@ public class DummyProducer implements ProductsProducer, UpdateProducer {
         String path = "/products/products.xml";
         try {
 			sendMessage(path, "product-queue");
-    		logger.info(String.format("Sent products message based on '%s'", path));
+    		logger.info(format("Sent products message based on '%s'", path));
 		} catch (IOException e) {
-    		logger.error(String.format("Could not send new products message based on '%s'", path), e);
+    		logger.error(format("Could not send new products message based on '%s'", path), e);
 		}
 	}
 
@@ -58,28 +60,26 @@ public class DummyProducer implements ProductsProducer, UpdateProducer {
 	 */
 	@Override
 	public void produceUpdateMessage() {
-        String path = String.format("/products/update-0%s.xml", ThreadLocalRandom.current().nextInt(1, 3));
+        String path = format("/products/update-0%s.xml", ThreadLocalRandom.current().nextInt(1, 3));
         try {
 			sendMessage(path, "update-queue");
-    		logger.info(String.format("Sent update message based on '%s'", path));
+    		logger.info(format("Sent update message based on '%s'", path));
 		} catch (IOException e) {
-    		logger.error(String.format("Could not send new update message based on '%s'", path), e);
+    		logger.error(format("Could not send new update message based on '%s'", path), e);
 		}
 	}
 	
 	/**
 	 * set JMS message
 	 * 
-	 * @param path
-	 * @param queue
-	 * @throws IOException
+	 * @param path path
+	 * @param queue queue
+	 * @throws IOException IOException
 	 */
 	private void sendMessage(String path, String queue) throws IOException {
-		logger.info(String.format("Sending message based on '%s' to queue '%s'", path, queue));
+		logger.info(format("Sending message based on '%s' to queue '%s'", path, queue));
 		try (InputStream is = DummyProducer.class.getResourceAsStream(path); BufferedReader buffer = new BufferedReader(new InputStreamReader(is))) {
      		jmsTemplate.convertAndSend(queue, buffer.lines().collect(Collectors.joining("\n")));
-        } catch (IOException e)  {
-    		throw e;
         }
 	}
 }
