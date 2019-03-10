@@ -24,9 +24,9 @@ public class DescriptionUpdate {
 	/**
 	 * new DescriptionUpdate
 	 * 
-	 * @param product
+	 * @param product product
 	 */
-	public DescriptionUpdate(DescriptionUpdateProduct product) {
+	DescriptionUpdate(DescriptionUpdateProduct product) {
 		super();
 		this.product = product;
 	}
@@ -41,7 +41,7 @@ public class DescriptionUpdate {
 
 	/**
 	 * set DescriptionUpdateProduct
-	 * @param product
+	 * @param product product
 	 */
 	@XmlElement(name = "Product")
 	public void setProduct(DescriptionUpdateProduct product) {
@@ -66,11 +66,10 @@ public class DescriptionUpdate {
 			return false;
 		DescriptionUpdate other = (DescriptionUpdate) obj;
 		if (product == null) {
-			if (other.product != null)
-				return false;
-		} else if (!product.equals(other.product))
-			return false;
-		return true;
+			return other.product == null;
+		} else {
+			return product.equals(other.product);
+		}
 	}
 
 	@Override
