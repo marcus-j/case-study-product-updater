@@ -15,7 +15,7 @@ public class RawProduct {
 	/**
 	 * construct RawProduct from StockedProduct
 	 * 
-	 * @param stockedProduct
+	 * @param stockedProduct a stocked product
 	 */
 	public RawProduct(StockedProduct stockedProduct) {
 		super();
@@ -27,9 +27,9 @@ public class RawProduct {
 	/**
 	 * construct RawProduct
 	 * 
-	 * @param id
-	 * @param name
-	 * @param description
+	 * @param id id
+	 * @param name product name
+	 * @param description description
 	 */
 	public RawProduct(String id, String name, String description) {
 		super();
@@ -87,19 +87,18 @@ public class RawProduct {
 		if (description == null) {
 			if (other.description != null)
 				return false;
-		} else if (!description.equals(other.description))
+		} else if (!description.equals(other.description)) {
 			return false;
+		}
 		if (id == null) {
 			if (other.id != null)
 				return false;
-		} else if (!id.equals(other.id))
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
+			return other.name == null;
+		} else return name.equals(other.name);
 	}
 
 	@Override
