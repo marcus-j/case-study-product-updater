@@ -20,8 +20,8 @@ public class JMSConfiguration {
 	/**
 	 * JmsListenerContainerFactory
 	 * 
-	 * @param connectionFactory
-	 * @param configurer
+	 * @param connectionFactory ConnectionFactory
+	 * @param configurer DefaultJmsListenerContainerFactoryConfigurer
 	 * @return JmsListenerContainerFactory
 	 */
 	@Bean
