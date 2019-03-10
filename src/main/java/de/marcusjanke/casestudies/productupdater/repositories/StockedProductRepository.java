@@ -16,7 +16,7 @@ public interface StockedProductRepository extends CrudRepository<StockedProduct,
 
 	/**
 	 * find StockedProduct by SKU
-	 * @param sku
+	 * @param sku SKU
 	 * @return StockedProduct
 	 */
 	List<StockedProduct> findBySku(String sku);
