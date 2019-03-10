@@ -20,7 +20,7 @@ public class Update {
 	/**
 	 * set stock updates
 	 * 
-	 * @param stockUpdates
+	 * @param stockUpdates stock updates
 	 */
 	@XmlElement(name = "Stock")
 	public void setStockUpdates(List<StockUpdate> stockUpdates) {
@@ -30,7 +30,7 @@ public class Update {
 	/**
 	 * set description updates
 	 * 
-	 * @param descriptionUpdates
+	 * @param descriptionUpdates description updates
 	 */
 	@XmlElement(name = "Description")
 	public void setDescriptionUpdates(List<DescriptionUpdate> descriptionUpdates) {
@@ -76,14 +76,14 @@ public class Update {
 		if (descriptionUpdates == null) {
 			if (other.descriptionUpdates != null)
 				return false;
-		} else if (!descriptionUpdates.equals(other.descriptionUpdates))
+		} else if (!descriptionUpdates.equals(other.descriptionUpdates)) {
 			return false;
+		}
 		if (stockUpdates == null) {
-			if (other.stockUpdates != null)
-				return false;
-		} else if (!stockUpdates.equals(other.stockUpdates))
-			return false;
-		return true;
+			return other.stockUpdates == null;
+		} else {
+			return stockUpdates.equals(other.stockUpdates);
+		}
 	}
 
 	@Override
