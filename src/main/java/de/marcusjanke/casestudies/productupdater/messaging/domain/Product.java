@@ -30,10 +30,10 @@ public class Product {
 	/**
 	 * new Product
 	 * 
-	 * @param id
-	 * @param name
-	 * @param description
-	 * @param sku
+	 * @param id id
+	 * @param name name
+	 * @param description description
+	 * @param sku SKU
 	 */
 	public Product(String id, String name, String description, String sku) {
 		super();
@@ -46,7 +46,7 @@ public class Product {
 	/**
 	 * set id
 	 * 
-	 * @param id
+	 * @param id id
 	 */
 	@XmlAttribute
 	public void setId(String id) {
@@ -56,7 +56,7 @@ public class Product {
 	/**
 	 * set name
 	 * 
-	 * @param name
+	 * @param name name
 	 */
 	@XmlElement(name = "Name")
 	public void setName(String name) {
@@ -66,7 +66,7 @@ public class Product {
 	/**
 	 * set description
 	 * 
-	 * @param description
+	 * @param description description
 	 */
 	@XmlElement(name = "Description")
 	@XmlJavaTypeAdapter(CDATAAdapter.class)
@@ -77,7 +77,7 @@ public class Product {
 	/**
 	 * set sku
 	 * 
-	 * @param sku
+	 * @param sku SKU
 	 */
 	@XmlElement(name = "sku")
 	public void setSku(String sku) {
@@ -142,19 +142,20 @@ public class Product {
 		if (id == null) {
 			if (other.id != null)
 				return false;
-		} else if (!id.equals(other.id))
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		if (name == null) {
 			if (other.name != null)
 				return false;
-		} else if (!name.equals(other.name))
+		} else if (!name.equals(other.name)) {
 			return false;
+		}
 		if (sku == null) {
-			if (other.sku != null)
-				return false;
-		} else if (!sku.equals(other.sku))
-			return false;
-		return true;
+			return other.sku == null;
+		} else {
+			return sku.equals(other.sku);
+		}
 	}
 
 	@Override
