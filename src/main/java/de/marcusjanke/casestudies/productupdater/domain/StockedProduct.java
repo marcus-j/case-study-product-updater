@@ -1,13 +1,5 @@
 package de.marcusjanke.casestudies.productupdater.domain;
 
-/**
- * Stocked product with full information. (Stock inluded in same table 
- * in order to not having to deal with stock updates for non-existing data 
- * (not in scope of this exercise)) 
- * 
- * @author marcus
- *
- */
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -16,6 +8,14 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+/**
+ * Stocked product with full information. (Stock inluded in same table
+ * in order to not having to deal with stock updates for non-existing data
+ * (not in scope of this exercise))
+ *
+ * @author marcus
+ *
+ */
 @Entity
 @Table(name = "products")
 public class StockedProduct {
@@ -41,12 +41,12 @@ public class StockedProduct {
 	/**
 	 * new StockedProduct
 	 * 
-	 * @param id
-	 * @param name
-	 * @param description
-	 * @param sku
-	 * @param unit
-	 * @param quantity
+	 * @param id id
+	 * @param name name
+	 * @param description description
+	 * @param sku SKU
+	 * @param unit unit
+	 * @param quantity quantity
 	 */
 	public StockedProduct(String id, String name, String description, String sku, String unit, int quantity) {
 		super();
@@ -70,7 +70,7 @@ public class StockedProduct {
 	/**
 	 * set id
 	 * 
-	 * @param id
+	 * @param id id
 	 */
 	public void setId(String id) {
 		this.id = id;
@@ -88,7 +88,7 @@ public class StockedProduct {
 	/**
 	 * set name
 	 * 
-	 * @param name
+	 * @param name name
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -106,7 +106,7 @@ public class StockedProduct {
 	/**
 	 * set description
 	 * 
-	 * @param description
+	 * @param description description
 	 */
 	public void setDescription(String description) {
 		this.description = description;
@@ -124,7 +124,7 @@ public class StockedProduct {
 	/**
 	 * set SKU
 	 * 
-	 * @param sku
+	 * @param sku SKU
 	 */
 	public void setSku(String sku) {
 		this.sku = sku;
@@ -142,7 +142,7 @@ public class StockedProduct {
 	/**
 	 * set unit
 	 * 
-	 * @param unit
+	 * @param unit unit
 	 */
 	public void setUnit(String unit) {
 		this.unit = unit;
@@ -159,7 +159,7 @@ public class StockedProduct {
 
 	/**
 	 * set quantity
-	 * @param quantity
+	 * @param quantity quantity
 	 */
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
@@ -190,31 +190,34 @@ public class StockedProduct {
 		if (description == null) {
 			if (other.description != null)
 				return false;
-		} else if (!description.equals(other.description))
+		} else if (!description.equals(other.description)) {
 			return false;
+		}
 		if (id == null) {
 			if (other.id != null)
 				return false;
-		} else if (!id.equals(other.id))
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		if (name == null) {
 			if (other.name != null)
 				return false;
-		} else if (!name.equals(other.name))
+		} else if (!name.equals(other.name)) {
 			return false;
+		}
 		if (quantity != other.quantity)
 			return false;
 		if (sku == null) {
 			if (other.sku != null)
 				return false;
-		} else if (!sku.equals(other.sku))
+		} else if (!sku.equals(other.sku)) {
 			return false;
+		}
 		if (unit == null) {
-			if (other.unit != null)
-				return false;
-		} else if (!unit.equals(other.unit))
-			return false;
-		return true;
+			return other.unit == null;
+		} else {
+			return unit.equals(other.unit);
+		}
 	}
 
 	@Override
