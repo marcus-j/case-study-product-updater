@@ -20,6 +20,8 @@ import de.marcusjanke.casestudies.productupdater.messaging.domain.StockUpdate;
 import de.marcusjanke.casestudies.productupdater.messaging.domain.Update;
 import de.marcusjanke.casestudies.productupdater.repositories.StockedProductRepository;
 
+import static java.lang.String.format;
+
 /**
  * Receives JMS update messages and saves to DB
  * 
@@ -33,30 +35,30 @@ import de.marcusjanke.casestudies.productupdater.repositories.StockedProductRepo
 public class UpdateReceiver {
 
 	private final Logger logger = LoggerFactory.getLogger(UpdateReceiver.class);
-	private Unmarshaller jaxbUnmarshaller;
+	private Unmarshaller unmarshaller;
 	@Autowired
 	private StockedProductRepository stockedProductRepository;
 
 	/**
 	 * set up new ProductsReceiver
 	 * 
-	 * @throws JAXBException
+	 * @throws JAXBException JAXBException
 	 */
 	public UpdateReceiver() throws JAXBException {
 		JAXBContext jaxbContext = JAXBContext.newInstance(Update.class);
-		jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+		unmarshaller = jaxbContext.createUnmarshaller();
 	}
 
 	/**
 	 * receive message
 	 * 
-	 * @param message
+	 * @param message message
 	 */
 	@JmsListener(destination = "update-queue", containerFactory = "myFactory")
 	public void receiveMessage(String message) {
 		try {
-			Update update = (Update) jaxbUnmarshaller.unmarshal(new StringReader(message));
-			logger.info("Received update message <" + update + ">");
+			Update update = (Update) unmarshaller.unmarshal(new StringReader(message));
+			logger.info(format("Received update message <%s>", update));
 			saveUpdates(update);
 		} catch (JAXBException e) {
 			logger.error("Could not read update message", e);
@@ -66,50 +68,50 @@ public class UpdateReceiver {
 	/**
 	 * savre updates
 	 * 
-	 * @param update
+	 * @param update update
 	 */
 	private void saveUpdates(Update update) {
 		if (Objects.nonNull(update.getStockUpdates())) {
-			update.getStockUpdates().stream().forEach(this::saveStockUpdate);
+			update.getStockUpdates().forEach(this::saveStockUpdate);
 		}
 		if (Objects.nonNull(update.getDescriptionUpdates())) {
-			update.getDescriptionUpdates().stream().forEach(this::saveDescriptionUpdate);
+			update.getDescriptionUpdates().forEach(this::saveDescriptionUpdate);
 		}
 	}
 
 	/**
 	 * save description updates
 	 * 
-	 * @param descriptionUpdate
+	 * @param descriptionUpdate description update
 	 */
 	private void saveDescriptionUpdate(DescriptionUpdate descriptionUpdate) {
 		List<StockedProduct> products = stockedProductRepository.findBySku(descriptionUpdate.getProduct().getSku());
-		if (products.size() > 0) {
+		if (products.isEmpty()) {
+			logger.warn(format("Could not update product description. SKU '%s' not found.",
+					descriptionUpdate.getProduct().getSku()));
+		} else {
 			StockedProduct product = products.get(0);
 			product.setDescription(descriptionUpdate.getProduct().getDescription());
 			stockedProductRepository.save(product);
-			logger.info(String.format("Updated description for product: %s", product));
-		} else {
-			logger.warn(String.format("Could not update product description. SKU '%s' not found.",
-					descriptionUpdate.getProduct().getSku()));
+			logger.info(format("Updated description for product: %s", product));
 		}
 	}
 
 	/**
 	 * savre stock updates
 	 * 
-	 * @param stockUpdate
+	 * @param stockUpdate stock update
 	 */
 	private void saveStockUpdate(StockUpdate stockUpdate) {
 		List<StockedProduct> products = stockedProductRepository.findBySku(stockUpdate.getSku());
-		if (products.size() > 0) {
+		if (products.isEmpty()) {
+			logger.warn(format("Could not update product stock. SKU '%s' not found.", stockUpdate.getSku()));
+		} else {
 			StockedProduct product = products.get(0);
 			product.setUnit(stockUpdate.getUnit());
 			product.setQuantity(stockUpdate.getQuantity());
 			stockedProductRepository.save(product);
-			logger.info(String.format("Updated stock for product: %s", product));
-		} else {
-			logger.warn(String.format("Could not update product stock. SKU '%s' not found.", stockUpdate.getSku()));
+			logger.info(format("Updated stock for product: %s", product));
 		}
 	}
 }
