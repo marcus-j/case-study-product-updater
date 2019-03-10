@@ -18,6 +18,8 @@ import de.marcusjanke.casestudies.productupdater.messaging.domain.Product;
 import de.marcusjanke.casestudies.productupdater.messaging.domain.Products;
 import de.marcusjanke.casestudies.productupdater.repositories.StockedProductRepository;
 
+import static java.lang.String.format;
+
 /**
  * Receives JMS product messages and saves to DB
  * 
@@ -38,7 +40,7 @@ public class ProductsReceiver {
 	/**
 	 * set up new ProductsReceiver
 	 * 
-	 * @throws JAXBException
+	 * @throws JAXBException JAXBException delegation
 	 */
 	public ProductsReceiver() throws JAXBException {
 		JAXBContext jaxbContext = JAXBContext.newInstance(Products.class);
@@ -48,13 +50,13 @@ public class ProductsReceiver {
 	/**
 	 * receive message
 	 * 
-	 * @param message
+	 * @param message message
 	 */
 	@JmsListener(destination = "product-queue", containerFactory = "myFactory")
 	public void receiveMessage(String message) {
 		try {
 			Products products = (Products) jaxbUnmarshaller.unmarshal(new StringReader(message));
-			logger.info("Received product message <" + products + ">");
+			logger.info(format("Received product message <%s>", products));
 			saveProducts(products);
 		} catch (JAXBException e) {
 			logger.error("Could not read products message", e);
@@ -62,9 +64,9 @@ public class ProductsReceiver {
 	}
 
 	/**
-	 * savre receives products
+	 * save received products
 	 * 
-	 * @param products
+	 * @param products received products
 	 */
 	private void saveProducts(Products products) {
 		products.getProducts().stream().map(this::mapToStockedProduct).forEach(this::saveProduct);
@@ -73,7 +75,7 @@ public class ProductsReceiver {
 	/**
 	 * map Product instance to StockedProduct instance
 	 * 
-	 * @param product
+	 * @param product product
 	 * @return StockedProduct
 	 */
 	private StockedProduct mapToStockedProduct(Product product) {
@@ -83,7 +85,7 @@ public class ProductsReceiver {
 	/**
 	 * savre StockedProduct instance to DB
 	 * 
-	 * @param product
+	 * @param product product
 	 */
 	private void saveProduct(StockedProduct product) {
 		StockedProduct originalProduct = stockedProductRepository.findOne(product.getId());
@@ -91,10 +93,10 @@ public class ProductsReceiver {
 			originalProduct.setDescription(product.getDescription());
 			originalProduct.setSku(product.getSku());
 			stockedProductRepository.save(originalProduct);
-			logger.info(String.format("Updated product: %s", originalProduct));
+			logger.info(format("Updated product: %s", originalProduct));
 		} else {
 			stockedProductRepository.save(product);
-			logger.info(String.format("Saved product: %s", product));
+			logger.info(format("Saved product: %s", product));
 		}
 	}
 }
