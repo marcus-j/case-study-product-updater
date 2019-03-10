@@ -47,4 +47,5 @@ dependencies {
 	testCompile group: 'org.assertj', name: 'assertj-core', version: versions.assertj
     testCompile group: 'junit', name: 'junit', version: versions.junit
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springboot
+    testCompile group: 'org.awaitility', name: 'awaitility', version: '3.1.6'
 }

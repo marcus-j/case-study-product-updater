@@ -1,7 +1,9 @@
 package de.marcusjanke.casestudies.productupdater.controllers;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.*;
 
+import static org.awaitility.Awaitility.await;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -15,7 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import de.marcusjanke.casestudies.productupdater.controllers.ProductController;
 import de.marcusjanke.casestudies.productupdater.repositories.StockedProductRepository;
 
 @RunWith(SpringRunner.class)
@@ -32,17 +33,14 @@ public class ProductControllerTest {
 	
 	@Before
 	public void waitForDataToBeAvailable() {
-		try {
-			Thread.sleep(15_000L);
-		} catch (InterruptedException e) {}
-		assertThat(stockedProductRepository.findAll()).isNotNull().isNotEmpty();
+		await().atMost(15, SECONDS).until(() -> stockedProductRepository.count() > 0);
 	}
-	
+
 	/**
 	 * test controller is in context
 	 */
 	@Test
-	public void contextLoads() throws Exception {
+	public void contextLoads() {
 		assertThat(productController).isNotNull();
 		assertThat(mockMvc).isNotNull();
 	}
