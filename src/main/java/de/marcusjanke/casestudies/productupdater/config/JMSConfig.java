@@ -1,4 +1,4 @@
-package de.marcusjanke.casestudies.productupdater;
+package de.marcusjanke.casestudies.productupdater.config;
 
 import javax.jms.ConnectionFactory;
 
@@ -15,7 +15,7 @@ import org.springframework.jms.config.JmsListenerContainerFactory;
  *
  */
 @Configuration
-public class JMSConfiguration {
+public class JMSConfig {
 
 	/**
 	 * JmsListenerContainerFactory
@@ -25,7 +25,7 @@ public class JMSConfiguration {
 	 * @return JmsListenerContainerFactory
 	 */
 	@Bean
-	public JmsListenerContainerFactory<?> myFactory(ConnectionFactory connectionFactory,
+	public JmsListenerContainerFactory myFactory(ConnectionFactory connectionFactory,
 			DefaultJmsListenerContainerFactoryConfigurer configurer) {
 		DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
 		configurer.configure(factory, connectionFactory);
