@@ -1,6 +1,8 @@
 package de.marcusjanke.casestudies.productupdater.repositories;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.*;
+import static org.awaitility.Awaitility.await;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,13 +13,13 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import de.marcusjanke.casestudies.productupdater.domain.StockedProduct;
-import de.marcusjanke.casestudies.productupdater.repositories.StockedProductRepository;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class StockedProductRepositoryTest {
 
 	@Autowired
+	private
 	StockedProductRepository stockedProductRepository;
 
 	/**
@@ -30,11 +32,7 @@ public class StockedProductRepositoryTest {
 
 	@Before
 	public void waitForDataToBeAvailable() {
-		try {
-			Thread.sleep(5_000L);
-		} catch (InterruptedException e) {
-		}
-		assertThat(stockedProductRepository.findAll()).isNotNull().isNotEmpty();
+		await().atMost(15, SECONDS).until(() -> stockedProductRepository.count() > 0);
 	}
 
 	/**
