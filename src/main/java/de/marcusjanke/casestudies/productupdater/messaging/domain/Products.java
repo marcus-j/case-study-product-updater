@@ -20,7 +20,7 @@ public class Products {
 	/**
 	 * new Products
 	 * 
-	 * @param products
+	 * @param products Products
 	 */
 	public Products(List<Product> products) {
 		super();
@@ -36,7 +36,7 @@ public class Products {
 	/**
 	 * set product list
 	 * 
-	 * @param products
+	 * @param products products
 	 */
 	public void setProduct(List<Product> products) {
 		this.products = products;
@@ -69,11 +69,10 @@ public class Products {
 			return false;
 		Products other = (Products) obj;
 		if (products == null) {
-			if (other.products != null)
-				return false;
-		} else if (!products.equals(other.products))
-			return false;
-		return true;
+			return other.products == null;
+		} else {
+			return products.equals(other.products);
+		}
 	}
 
 	@Override
