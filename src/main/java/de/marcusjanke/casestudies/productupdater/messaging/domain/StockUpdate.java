@@ -24,11 +24,11 @@ public class StockUpdate {
 	/**
 	 * new StockUpdate
 	 * 
-	 * @param sku
-	 * @param unit
-	 * @param quantity
+	 * @param sku SKU
+	 * @param unit uni
+	 * @param quantity quantity
 	 */
-	public StockUpdate(String sku, String unit, int quantity) {
+	StockUpdate(String sku, String unit, int quantity) {
 		super();
 		this.sku = sku;
 		this.unit = unit;
@@ -47,7 +47,7 @@ public class StockUpdate {
 	/**
 	 * set unit
 	 * 
-	 * @param unit
+	 * @param unit unit
 	 */
 	public void setUnit(String unit) {
 		this.unit = unit;
@@ -63,9 +63,9 @@ public class StockUpdate {
 	}
 
 	/**
-	 * set quantitiy
+	 * set quantity
 	 * 
-	 * @param quantity
+	 * @param quantity quantity
 	 */
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
@@ -83,7 +83,7 @@ public class StockUpdate {
 	/**
 	 * set SKU
 	 * 
-	 * @param sku
+	 * @param sku SKU
 	 */
 	public void setSku(String sku) {
 		this.sku = sku;
@@ -113,14 +113,14 @@ public class StockUpdate {
 		if (sku == null) {
 			if (other.sku != null)
 				return false;
-		} else if (!sku.equals(other.sku))
+		} else if (!sku.equals(other.sku)) {
 			return false;
+		}
 		if (unit == null) {
-			if (other.unit != null)
-				return false;
-		} else if (!unit.equals(other.unit))
-			return false;
-		return true;
+			return other.unit == null;
+		} else {
+			return unit.equals(other.unit);
+		}
 	}
 
 	@Override
