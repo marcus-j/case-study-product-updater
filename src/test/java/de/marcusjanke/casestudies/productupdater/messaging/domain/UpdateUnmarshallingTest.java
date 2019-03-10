@@ -11,11 +11,6 @@ import javax.xml.bind.Unmarshaller;
 
 import org.junit.Test;
 
-import de.marcusjanke.casestudies.productupdater.messaging.domain.DescriptionUpdate;
-import de.marcusjanke.casestudies.productupdater.messaging.domain.DescriptionUpdateProduct;
-import de.marcusjanke.casestudies.productupdater.messaging.domain.StockUpdate;
-import de.marcusjanke.casestudies.productupdater.messaging.domain.Update;
-
 /**
  * test updates JAXB mapping
  * 
@@ -31,9 +26,7 @@ public class UpdateUnmarshallingTest {
 
 	/**
 	 * test unmarshalling of stock updates
-	 * 
-	 * @throws IOException
-	 * @throws JAXBException
+	 *
 	 */
 	@Test
 	public void testUpdateXMLUnmarshallingStockUpdate() throws JAXBException, IOException {
@@ -43,16 +36,12 @@ public class UpdateUnmarshallingTest {
 			Update update = (Update) jaxbUnmarshaller.unmarshal(is);
 			assertThat(update).isNotNull();
 			assertThat(update.getStockUpdates()).isNotNull().isNotEmpty().contains(STOCK_UPDATE);
-		} catch (Exception e) {
-			throw e;
 		}
 	}
 
 	/**
 	 * test unmarshalling of description updates
-	 * 
-	 * @throws IOException
-	 * @throws JAXBException
+	 *
 	 */
 	@Test
 	public void testUpdateXMLUnmarshallingDescriptionUpdate() throws JAXBException, IOException {
@@ -62,8 +51,6 @@ public class UpdateUnmarshallingTest {
 			Update update = (Update) jaxbUnmarshaller.unmarshal(is);
 			assertThat(update).isNotNull();
 			assertThat(update.getDescriptionUpdates()).isNotNull().isNotEmpty().contains(DESC_UPDATE);
-		} catch (Exception e) {
-			throw e;
 		}
 	}
 }
