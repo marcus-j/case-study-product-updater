@@ -4,8 +4,6 @@ import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Test;
 
-import de.marcusjanke.casestudies.productupdater.jaxb.CDATAAdapter;
-
 /**
  * test CDATAAdapter
  * 
@@ -18,31 +16,25 @@ public class CDATAAdapterTest {
 
 	/**
 	 * test CDATAAdapter marshalling
-	 * 
-	 * @throws Exception
 	 */
 	@Test
-	public void testMarshal() throws Exception {
+	public void testMarshal() {
 		assertThat(adapter.marshal("a value")).isNotNull().isEqualTo("<![CDATA[a value]]>");
 	}
 
 	/**
 	 * test CDATAAdapter unmarshalling
-	 * 
-	 * @throws Exception
 	 */
 	@Test
-	public void testUnmarshal() throws Exception {
+	public void testUnmarshal() {
 		assertThat(adapter.unmarshal("a value")).isNotNull().isEqualTo("a value");
 	}
 
 	/**
 	 * test CDATAAdapter trimming while unmarshalling
-	 * 
-	 * @throws Exception
 	 */
 	@Test
-	public void testUnmarshalTrimmed() throws Exception {
+	public void testUnmarshalTrimmed() {
 		assertThat(adapter.unmarshal("\na value  ")).isNotNull().isEqualTo("a value");
 	}
 }
