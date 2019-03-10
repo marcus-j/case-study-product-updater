@@ -14,7 +14,7 @@ public class CDATAAdapter extends XmlAdapter<String, String> {
 	 * marshal CDATA content
 	 */
 	@Override
-	public String marshal(String value) throws Exception {
+	public String marshal(String value) {
 		return "<![CDATA[" + value + "]]>";
 	}
 
@@ -22,7 +22,7 @@ public class CDATAAdapter extends XmlAdapter<String, String> {
 	 * unmarshal CDATA content (also trims)
 	 */
 	@Override
-	public String unmarshal(String value) throws Exception {
+	public String unmarshal(String value) {
 		return value.trim();
 	}
 
