@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -17,6 +16,7 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 
 import static java.lang.String.format;
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
  * Produce dummy messages from resources
@@ -36,8 +36,8 @@ public class DummyProducer implements ProductsProducer, UpdateProducer {
 	 * new DummyProducer
 	 */
 	public DummyProducer() {
-		executorService.scheduleAtFixedRate(this::produceProductsMessage, 5, 60, TimeUnit.SECONDS);
-		executorService.scheduleAtFixedRate(this::produceUpdateMessage, 10, 10, TimeUnit.SECONDS);
+		executorService.scheduleAtFixedRate(this::produceProductsMessage, 5, 60, SECONDS);
+		executorService.scheduleAtFixedRate(this::produceUpdateMessage, 10, 10, SECONDS);
 		logger.info("Started DummyProducer");
 	}
 
